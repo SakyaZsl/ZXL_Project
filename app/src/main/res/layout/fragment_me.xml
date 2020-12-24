@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    android:orientation="vertical">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="28dp">
+
+        <ImageView
+            android:id="@+id/ivUserHead"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/icon_show_gold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNickName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="72dp"
+            android:text="大众车间"
+            android:textColor="@color/text_color_b"
+            android:textSize="@dimen/text_size_xxl"
+            app:layout_constraintLeft_toRightOf="@+id/ivUserHead"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivVipLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/icon_vip_level"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/ivUserHead" />
+
+
+        <TextView
+            android:id="@+id/tvVipTime"
+            android:text="天津设备室"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:textColor="@color/text_color_gray"
+            android:textSize="@dimen/text_size_l"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/ivVipLevel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llInviteFriend"
+            style="@style/ll_me_page_item">
+
+            <TextView
+                style="@style/tv_me_page_item"
+                android:layout_marginTop="2dp"
+                android:text="企业文化" />
+
+            <ImageView style="@style/iv_me_page_item" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llModifyPassword"
+            style="@style/ll_me_page_item">
+
+            <TextView
+                style="@style/tv_me_page_item"
+                android:layout_marginTop="2dp"
+                android:text="修改密码" />
+
+            <ImageView style="@style/iv_me_page_item" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llVipRecharge"
+            style="@style/ll_me_page_item">
+
+            <TextView
+                style="@style/tv_me_page_item"
+                android:layout_marginTop="2dp"
+                android:text="科技强国" />
+
+            <ImageView style="@style/iv_me_page_item" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llInviteCode"
+            style="@style/ll_me_page_item">
+
+            <TextView
+                style="@style/tv_me_page_item"
+                android:layout_marginTop="2dp"
+                android:text="组织架构" />
+
+            <ImageView style="@style/iv_me_page_item" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llProblem"
+            style="@style/ll_me_page_item">
+
+            <TextView
+                style="@style/tv_me_page_item"
+                android:layout_marginTop="2dp"
+                android:text="学习中心" />
+
+            <ImageView style="@style/iv_me_page_item" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llLoginOut"
+            style="@style/ll_me_page_item"
+            >
+
+            <TextView
+                android:layout_marginTop="2dp"
+                android:text="福利社"
+                style="@style/tv_me_page_item"
+                />
+            <ImageView
+                style="@style/iv_me_page_item"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

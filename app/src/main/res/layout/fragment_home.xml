@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/common_bg"
+    android:layout_height="match_parent">
+
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.scwang.smart.refresh.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:text="铂朗"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="@dimen/text_size_xxxl"
+                    android:textColor="@color/text_color_b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:id="@+id/llSearch"
+                    android:layout_width="match_parent"
+                    android:layout_marginRight="22dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/common_shape_home_search"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_height="match_parent">
+
+
+                    <ImageView
+                        android:layout_marginLeft="11dp"
+                        android:src="@drawable/icon_home_msg"
+                        android:layout_width="12dp"
+                        android:layout_height="18dp"/>
+
+                    <TextView
+                        android:textSize="@dimen/text_size_xl"
+                        android:gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="11dp"
+                        android:background="@null"
+                        android:hint="输入配件名称"/>
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+            <com.youth.banner.Banner
+                android:id="@+id/bannerHome"
+                android:visibility="gone"
+                android:layout_marginTop="27dp"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"/>
+
+            <ImageView
+                android:id="@+id/ivBanner"
+                android:layout_marginTop="27dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg_home_page_banner"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="19dp"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_marginLeft="21dp"
+                    android:layout_width="22dp"
+                    android:src="@drawable/icon_show_gold"
+                    android:layout_height="22dp"/>
+
+
+                <TextView
+                    android:text="实时金价"
+                    android:layout_marginLeft="13dp"
+                    android:textSize="17sp"
+                    android:textColor="@color/text_color_b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginLeft="21dp"
+                android:layout_marginRight="21dp"
+                android:layout_marginTop="15dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvGoldTime"
+                    android:text="北京时间：2020-4-11"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvGoldList"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_common_item_bg"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvAllBrand"
+                android:text="查看全部>>"
+                android:paddingTop="20dp"
+                android:gravity="right"
+                android:paddingBottom="10dp"
+                android:background="@color/white"
+                android:paddingRight="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCarList"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="21dp"
+                android:layout_marginRight="21dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"/>
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

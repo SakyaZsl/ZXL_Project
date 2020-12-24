@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/flContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/common_home_page_bottom" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_home_page_bottom"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:id="@+id/llHomePage"
+            style="@style/ll_home_page_bottom">
+
+            <ImageView
+                android:id="@+id/ivHomeMain"
+                android:src="@drawable/selector_home_main"
+                style="@style/iv_home_page_bottom" />
+
+            <TextView
+                android:id="@+id/tvHomeMain"
+                style="@style/tv_home_page_bottom"
+                android:text="首页" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llProblemPage"
+            style="@style/ll_home_page_bottom"
+            >
+
+            <ImageView
+                android:id="@+id/ivHomeProblem"
+                android:src="@drawable/selector_home_problems"
+                style="@style/iv_home_page_bottom"
+                />
+
+            <TextView
+                android:id="@+id/tvHomeProblem"
+                android:text="模板"
+                style="@style/tv_home_page_bottom"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llMsgPage"
+            style="@style/ll_home_page_bottom"
+            >
+
+            <ImageView
+                android:id="@+id/ivHomeMsg"
+                android:src="@drawable/selector_home_news"
+                style="@style/iv_home_page_bottom"
+                />
+
+            <TextView
+                android:id="@+id/tvHomeMsg"
+                android:text="新闻"
+                style="@style/tv_home_page_bottom"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llMePage"
+            style="@style/ll_home_page_bottom"
+            >
+
+            <ImageView
+                android:id="@+id/ivHomeMe"
+                android:src="@drawable/selector_home_me"
+                style="@style/iv_home_page_bottom"
+                />
+
+            <TextView
+                android:id="@+id/tvHomeMe"
+                android:text="我的"
+                style="@style/tv_home_page_bottom"
+                />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,15 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    
+    
+    <dimen name="common_title_height">44dp</dimen>
+    <dimen name="common_home_page_bottom">55dp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_xs">10sp</dimen>
+    <dimen name="text_size_xxs">8sp</dimen>
+    <dimen name="text_size_l">14sp</dimen>
+    <dimen name="text_size_xl">16sp</dimen>
+    <dimen name="text_size_xxl">18sp</dimen>
+    <dimen name="text_size_xxxl">20sp</dimen>
+    
+</resources>

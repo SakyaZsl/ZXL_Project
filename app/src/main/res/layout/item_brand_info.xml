@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivCarImg"
+        android:src="@drawable/icon_pay_wx"
+        android:layout_width="110dp"
+        android:layout_marginTop="15dp"
+        android:layout_height="110dp"/>
+
+    <TextView
+        android:id="@+id/tvCarName"
+        android:text="奔驰"
+        android:textColor="@color/text_color_b"
+        android:textSize="@dimen/text_size_xxl"
+        android:layout_marginTop="19dp"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:id="@+id/tvCarPrice"
+        android:text="价格：9999"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/text_color_b"
+        android:textSize="@dimen/text_size_xl"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_height="wrap_content"/>
+
+
+
+</LinearLayout>

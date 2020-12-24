@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/bg_black_70"
+    android:layout_height="match_parent">
+
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnAlbum"
+        android:text="从相册选择"
+        android:textColor="@color/text_color_b"
+        android:textSize="@dimen/text_size_xl"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/text_color_b"/>
+
+    <Button
+        android:id="@+id/btnCamera"
+        android:text="照相机"
+        android:background="@color/white"
+        android:textColor="@color/text_color_b"
+        android:textSize="@dimen/text_size_xl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/text_color_b"/>
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:text="取消"
+        android:background="@color/white"
+        android:textColor="@color/text_color_b"
+        android:textSize="@dimen/text_size_xl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+
+
+</LinearLayout>
