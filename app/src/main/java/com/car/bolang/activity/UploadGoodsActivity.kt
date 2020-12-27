@@ -30,18 +30,14 @@ import com.car.bolang.inter.TakePictureCallback
 import com.car.bolang.network.HttpUtilsInterface
 import com.car.bolang.network.NetHelpUtils
 import com.car.bolang.network.UrlProtocol
-import com.car.bolang.util.Constants
-import com.car.bolang.util.GsonUtil
-import com.car.bolang.util.PreferencesUtil
-import com.car.bolang.util.ToastUtils
-import com.tencent.mm.opensdk.modelpay.PayReq
+import com.car.bolang.util.*
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import kotlinx.android.synthetic.main.activity_common_head.*
 import kotlinx.android.synthetic.main.activity_feedback.*
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import kotlinx.android.synthetic.main.activity_feedback.etDeviceNum
+import kotlinx.android.synthetic.main.activity_feedback.etDeviceNum1
+import kotlinx.android.synthetic.main.activity_feedback.tvDeviceNum
 import java.io.*
 
 class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
@@ -49,6 +45,9 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
     private var mUri: Uri? = null
     private var imageFile: File? = null
     private var imageUrl: String = ""
+    private var recordVo:SmartRecordReq?=null
+    private var isGet:Boolean=false
+    private var mPosition:Int=0
 
     var fragment: SelectPictureFragment? = null
 
@@ -56,9 +55,11 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
     companion object {
         const val REQUEST_PERMISSION_CODE = 1000
         const val REQUEST_TAKE_PHOTO_CODE = 1001
-        fun startAction(context: Context) {
+        fun startAction(context: Context,record:SmartRecordReq,isGet:Boolean,position:Int) {
             val intent = Intent(context, UploadGoodsActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.putExtra(Constants.GOOD_NAME,record)
+            intent.putExtra(Constants.IS_GET,isGet)
+            intent.putExtra(Constants.POSITION,position)
             context.startActivity(intent)
         }
     }
@@ -70,10 +71,24 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun init() {
         tvTitle.text = "拍照登记"
-        EventBus.getDefault().register(this)
+        recordVo= intent.getSerializableExtra(Constants.GOOD_NAME) as SmartRecordReq?
+        isGet=intent.getBooleanExtra(Constants.IS_GET,false)
+        mPosition=intent.getIntExtra(Constants.POSITION,0)
         api = WXAPIFactory.createWXAPI(this, Constants.WX_APP_ID)
+        if(!isGet){
+            llBackInfo.visibility=View.GONE
+        }else{
+            llBackInfo.visibility=View.VISIBLE
+            if(mPosition==5){
+                tvDeviceNum.visibility=View.GONE
+                etDeviceNum.visibility=View.VISIBLE
+            }else{
+                etDeviceNum.visibility=View.GONE
+                tvDeviceNum.text="${InitUtils.deviceNumList[mPosition]}-"
+            }
+        }
         btnCommitProblem.setOnClickListener {
-            getOrder()
+            saveRecord()
         }
         llTakePicture.setOnClickListener {
             if (!checkPermission()) {
@@ -98,37 +113,6 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
 
     }
 
-    private fun feedback() {
-        mLoadingDialog?.show()
-        val params = AskQuestionsReq(
-            etFeedback.text.toString(),
-            imageUrl,
-            PreferencesUtil.getInstance().userId
-        )
-        Log.e("zzzz", GsonUtil.GsonString(params))
-        NetHelpUtils.okGoBodyPost(
-            this,
-            UrlProtocol.ASK_QUESTION,
-            GsonUtil.GsonString(params),
-            object :
-                HttpUtilsInterface {
-                override fun onSuccess(result: String?) {
-                    mLoadingDialog?.dismiss()
-                    result?.let {
-                        val bean = GsonUtil.GsonToBean(it, BaseBean::class.java)
-                        if (bean.code == 0) {
-                            ToastUtils.toastShort(this@UploadGoodsActivity, "谢谢您的反馈")
-                            finish()
-                        }
-                    }
-                }
-
-                override fun onError(code: Int, errorMsg: String?) {
-                    ToastUtils.toastShort(this@UploadGoodsActivity, "请求失败，请重试")
-                    mLoadingDialog?.dismiss()
-                }
-            })
-    }
 
     private fun upLoadImg(file: File?) {
         file?.let {
@@ -140,7 +124,9 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
                     mLoadingDialog?.dismiss()
                     Log.e("zzzz", "上传图片 result${result}")
                     val bean = GsonUtil.GsonToBean(result, UploadImgVO::class.java)
-
+                    if (bean.code == NetHelpUtils.SUCCESS) {
+                        imageUrl = getImageUrl(bean.message)
+                    }
                 }
 
                 override fun onError(code: Int, errorMsg: String?) {
@@ -150,16 +136,6 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
             })
         }
 
-    }
-
-
-    private fun getOrder() {
-        if (imageFile == null) {
-            ToastUtils.toastShort(this, "请上传照片")
-            return
-        }
-        upLoadImg(imageFile)
-//        MainActivity.startAction(this)
     }
 
 
@@ -234,7 +210,6 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
         // 步骤一：创建存储照片的文件
         val path = filesDir.toString() + File.separator + "images" + File.separator
         imageFile = File(path, "feed${System.currentTimeMillis()}.jpg")
-        Log.e("zzzz", imageFile!!.absolutePath)
         if (!imageFile!!.parentFile.exists())
             imageFile!!.parentFile.mkdirs()
 
@@ -247,9 +222,9 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
             )
         } else {
             //步骤三：获取文件Uri
-            val path = File(getExternalFilesDir(null), "image/")
-            if (!path.exists()) {
-                path.mkdirs()
+            val path = getExternalFilesDir("image")
+            if (!path!!.exists()) {
+                path?.mkdirs()
             }
             imageFile = File(path, "feed${System.currentTimeMillis()}.jpg")
             mUri = Uri.fromFile(imageFile)
@@ -265,19 +240,15 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
         when (requestCode) {
             REQUEST_TAKE_PHOTO_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    ToastUtils.toastShort(this, "拍照成功")
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                        ToastUtils.toastLong(this, "版本对了")
                         loadBitmap()?.let {
-                            ToastUtils.toastShort(this, "有图片了")
                             ivFeedback.setImageBitmap(it)
                             return
                         }
-                        ToastUtils.toastLong(this, "没有图片了")
                     }
                     var bm: Bitmap? = null
                     try {
-                        bm = getBitmapFormUri2(mUri!!)
+                        bm = getBitmapFormUri(mUri!!)
                     } catch (e: FileNotFoundException) {
                         e.printStackTrace()
                     } catch (e: IOException) {
@@ -296,15 +267,6 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
         }
     }
 
-    private fun changeViewToImg() {
-        ivFeedback.visibility = View.VISIBLE
-        llTakePicture.visibility = View.GONE
-    }
-
-    fun changeViewNoData() {
-        ivFeedback.visibility = View.GONE
-        llTakePicture.visibility = View.VISIBLE
-    }
 
     @Throws(FileNotFoundException::class, IOException::class)
     fun getBitmapFormUri(uri: Uri): Bitmap? {
@@ -346,21 +308,6 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
         return compressImage(bitmap!!)//再进行质量压缩
     }
 
-    @Throws(FileNotFoundException::class, IOException::class)
-    fun getBitmapFormUri2(uri: Uri): Bitmap? {
-        tvTest.text = imageFile?.absolutePath
-
-        var input = contentResolver.openInputStream(uri)
-        //比例压缩
-        val bitmapOptions = BitmapFactory.Options()
-        bitmapOptions.inSampleSize = 1//设置缩放比例
-        bitmapOptions.inDither = true
-        bitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565
-        val bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions)
-        input!!.close()
-
-        return bitmap//再进行质量压缩
-    }
 
     private fun compressImage(image: Bitmap): Bitmap? {
         val baos = ByteArrayOutputStream()
@@ -376,32 +323,6 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
         }
         val isBm = ByteArrayInputStream(baos.toByteArray())//把压缩后的数据baos存放到ByteArrayInputStream中
         return BitmapFactory.decodeStream(isBm, null, null)
-    }
-
-
-    /**
-     * Gets the corresponding path to a file from the given content:// URI
-     * @param selectedVideoUri The content:// URI to find the file path from
-     * @param contentResolver The content resolver to use to perform the query.
-     * @return the file path as a string
-     */
-    fun getFilePathFromContentUri(
-        selectedVideoUri: Uri,
-        contentResolver: ContentResolver
-    ): String {
-        val filePath: String
-        val filePathColumn = arrayOf(MediaStore.MediaColumns.DATA)
-
-        val cursor = contentResolver.query(selectedVideoUri, filePathColumn, null, null, null)
-        //      也可用下面的方法拿到cursor
-        //      Cursor cursor = this.context.managedQuery(selectedVideoUri, filePathColumn, null, null, null);
-
-        cursor!!.moveToFirst()
-
-        val columnIndex = cursor.getColumnIndex(filePathColumn[0])
-        filePath = cursor.getString(columnIndex)
-        cursor.close()
-        return filePath
     }
 
 
@@ -422,34 +343,20 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
         return "http://bolang.laingman.com:8090/imgs/${name}"
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onGetStickyEvent(message: PaymentCallbackEvent) {
-        Log.e("zzzz", "message${message.payStatus}")
-        if (message.payStatus == 0) {
-            feedback()
-        } else {
-            ToastUtils.toastShort(this, getString(R.string.payment_failed))
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(this)
-    }
 
 
-    fun loadBitmap(): Bitmap? {
+    private fun loadBitmap(): Bitmap? {
         val opt = BitmapFactory.Options()
         opt.inJustDecodeBounds = true
         var bitmap = BitmapFactory.decodeFile(imageFile!!.absolutePath, opt)
         // 获取到这个图片的原始宽度和高度
         // 获取画布中间方框的宽度和高度
         // 获取到这个图片的原始宽度和高度
-	    val picWidth = opt.outWidth
-	    val picHeight = opt.outHeight
-	// 获取画布中间方框的宽度和高度
-	    val  screenWidth = 800
-	    val  screenHeight = 600
+        val picWidth = opt.outWidth
+        val picHeight = opt.outHeight
+        // 获取画布中间方框的宽度和高度
+        val  screenWidth = 800
+        val  screenHeight = 600
         // isSampleSize是表示对图片的缩放程度，比如值为2图片的宽度和高度都变为以前的1/2
         opt.inSampleSize = 1
         // isSampleSize是表示对图片的缩放程度，比如值为2图片的宽度和高度都变为以前的1/2
@@ -467,11 +374,72 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
         opt.inJustDecodeBounds = false
         bitmap = BitmapFactory.decodeFile(imageFile!!.absolutePath, opt)
         // 生成有像素经过缩放了的bitmap
-        if(bitmap==null){
-            ToastUtils.toastLong(this,"位图解析失败 呵呵呵 ")
-        }
         return bitmap
     }
+
+
+    private fun getDeviceNo(): String {
+        val sb = StringBuffer()
+        if (mPosition < 5) {
+            sb.append().append("-").append(etDeviceNum1.text).append("-").append(tvDeviceNum2.text)
+        } else {
+            sb.append(etDeviceNum.text)
+        }
+        return sb.toString()
+    }
+
+    private fun saveRecord(){
+        if (imageFile == null) {
+            ToastUtils.toastShort(this, "请上传照片")
+            return
+        }
+        if(isGet){
+            if (mPosition != 5) {
+                if (TextUtils.isEmpty(etDeviceNum1.text)) {
+                    ToastUtils.toastShort(this,"请输入设备编号")
+                    return
+                }
+            } else {
+                if (TextUtils.isEmpty(etDeviceNum.text)) {
+                    ToastUtils.toastShort(this,"请输入设备编号")
+                    return
+                }
+            }
+            recordVo?.deviceNo=getDeviceNo()
+        }
+        mLoadingDialog?.show()
+        NetHelpUtils.okGoBodyPost(
+            this,
+            UrlProtocol.TEST_SUBMIT,
+            GsonUtil.GsonString(recordVo),
+            object : HttpUtilsInterface {
+                override fun onSuccess(result: String?) {
+                    mLoadingDialog?.dismiss()
+                    Log.e("zzzz","onSuccess${result}")
+                    result?.let {
+                        val bean=GsonUtil.GsonToBean(result, BaseBeanVO::class.java)
+                        if(UrlProtocol.SUCCESS_CODE==bean.code){
+                            if(!isGet){
+                                ToastUtils.toastShort(this@UploadGoodsActivity,"开门成功，请放入物品")
+                            }
+                            MainActivity.startAction(this@UploadGoodsActivity)
+                            return
+                        }
+                        ToastUtils.toastShort(this@UploadGoodsActivity, "请求失败，请重试")
+                    }
+
+                }
+
+                override fun onError(code: Int, errorMsg: String?) {
+                    Log.e("zzzz","onError${errorMsg}")
+                    ToastUtils.toastShort(this@UploadGoodsActivity, "请求失败，请重试")
+                    mLoadingDialog?.dismiss()
+                }
+            })
+    }
+
+
+
 
 
 }
