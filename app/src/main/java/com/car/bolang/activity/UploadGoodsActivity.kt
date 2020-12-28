@@ -88,7 +88,7 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
             }
         }
         btnCommitProblem.setOnClickListener {
-            saveRecord()
+            upLoadImg(imageFile)
         }
         llTakePicture.setOnClickListener {
             if (!checkPermission()) {
@@ -110,31 +110,6 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
     }
 
     override fun initData() {
-
-    }
-
-
-    private fun upLoadImg(file: File?) {
-        file?.let {
-            mLoadingDialog?.show()
-            val param = HashMap<String, String>()
-            NetHelpUtils.uploadFile(this, UrlProtocol.UPLOAD_AVATAR, param, "file", file, object :
-                HttpUtilsInterface {
-                override fun onSuccess(result: String?) {
-                    mLoadingDialog?.dismiss()
-                    Log.e("zzzz", "上传图片 result${result}")
-                    val bean = GsonUtil.GsonToBean(result, UploadImgVO::class.java)
-                    if (bean.code == NetHelpUtils.SUCCESS) {
-                        imageUrl = getImageUrl(bean.message)
-                    }
-                }
-
-                override fun onError(code: Int, errorMsg: String?) {
-                    ToastUtils.toastShort(this@UploadGoodsActivity, "请求失败，请重试")
-                    mLoadingDialog?.dismiss()
-                }
-            })
-        }
 
     }
 
@@ -339,11 +314,6 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
     }
 
 
-    fun getImageUrl(name: String): String {
-        return "http://bolang.laingman.com:8090/imgs/${name}"
-    }
-
-
 
     private fun loadBitmap(): Bitmap? {
         val opt = BitmapFactory.Options()
@@ -388,26 +358,8 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
         return sb.toString()
     }
 
-    private fun saveRecord(){
-        if (imageFile == null) {
-            ToastUtils.toastShort(this, "请上传照片")
-            return
-        }
-        if(isGet){
-            if (mPosition != 5) {
-                if (TextUtils.isEmpty(etDeviceNum1.text)) {
-                    ToastUtils.toastShort(this,"请输入设备编号")
-                    return
-                }
-            } else {
-                if (TextUtils.isEmpty(etDeviceNum.text)) {
-                    ToastUtils.toastShort(this,"请输入设备编号")
-                    return
-                }
-            }
-            recordVo?.deviceNo=getDeviceNo()
-        }
-        mLoadingDialog?.show()
+    private fun saveRecord(url:String){
+        recordVo?.devicePicture=url
         NetHelpUtils.okGoBodyPost(
             this,
             UrlProtocol.TEST_SUBMIT,
@@ -440,6 +392,53 @@ class UploadGoodsActivity : BaseActivity(), TakePictureCallback {
 
 
 
+    private fun upLoadImg(file: File?) {
+        if (imageFile == null) {
+            ToastUtils.toastShort(this, "请上传照片")
+            return
+        }
+        if(isGet){
+            if (mPosition != 5) {
+                if (TextUtils.isEmpty(etDeviceNum1.text)) {
+                    ToastUtils.toastShort(this,"请输入设备编号")
+                    return
+                }
+            } else {
+                if (TextUtils.isEmpty(etDeviceNum.text)) {
+                    ToastUtils.toastShort(this,"请输入设备编号")
+                    return
+                }
+            }
+            recordVo?.deviceNo=getDeviceNo()
+        }
+        file?.let {
+            mLoadingDialog?.show()
+            val param = HashMap<String, String>()
+            NetHelpUtils.uploadFile(this, UrlProtocol.UPLOAD_AVATAR, param, "file", file, object :
+                HttpUtilsInterface {
+                override fun onSuccess(result: String?) {
+                    mLoadingDialog?.dismiss()
+                    Log.e("zzzz", "上传图片 result${result}")
+                    result?.let {
+                        val imgBean=GsonUtil.GsonToBean(it,UploadImageVO::class.java)
+                        imgBean?.let { bean->
+                            if(bean.files.isNotEmpty()){
+                                saveRecord(bean.files[0].url)
+                            }
+                        }
+                    }
+
+
+                }
+
+                override fun onError(code: Int, errorMsg: String?) {
+                    ToastUtils.toastShort(this@UploadGoodsActivity, "请求失败，请重试")
+                    mLoadingDialog?.dismiss()
+                }
+            })
+        }
+
+    }
 
 
 }

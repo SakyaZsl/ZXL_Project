@@ -135,10 +135,7 @@ class FeedbackActivity : BaseActivity(), TakePictureCallback {
                 override fun onSuccess(result: String?) {
                     mLoadingDialog?.dismiss()
                     Log.e("zzzz", "上传图片 result${result}")
-                    val bean=GsonUtil.GsonToBean(result,UploadImgVO::class.java)
-                    if(bean.code==NetHelpUtils.SUCCESS){
-                        imageUrl=getImageUrl(bean.message)
-                    }
+
                 }
 
                 override fun onError(code: Int, errorMsg: String?) {

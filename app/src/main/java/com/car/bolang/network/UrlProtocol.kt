@@ -24,7 +24,7 @@ class UrlProtocol {
                 const val  MEMBER_CARD_LIST="$URL_HOST/app/getMemberCardList"
                 //问题列表
                 const val  PROBLEM_LIST="$URL_HOST/app/getProblemLit"
-                const val  UPLOAD_AVATAR="$URL_HOST/app/uploadAvatar"
+                const val  UPLOAD_AVATAR="$URL_HOST/rlsb/borrow/record/file_upload"
                 const val  ASK_QUESTION="$URL_HOST/app/askQuestions"
                 const val  QUESTION_PRICE="$URL_HOST/app/questionsPrice"
                 const val  HOME_BANNER="$URL_HOST/app/getRotationChartList"
