@@ -6,10 +6,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import com.car.bolang.R
-import com.car.bolang.activity.InviteCodeActivity
-import com.car.bolang.activity.LoginActivity
-import com.car.bolang.activity.ProblemListActivity
-import com.car.bolang.activity.RechargeActivity
+import com.car.bolang.activity.*
 import com.car.bolang.bean.BannerBean
 import com.car.bolang.bean.UserInfoVO
 import com.car.bolang.common.BaseActivity
@@ -82,9 +79,9 @@ class MeFragment :BaseFragment(),CancelAndSureCallback,ShareAppCallback{
         //问题列表
         llProblem.setOnClickListener {
             activity?.let {
-                ToastUtils.toastShort(it,"本功能暂未开放~")
+                IpSettingActivity.startAction(activity!!)
                 return@setOnClickListener
-                ProblemListActivity.startAction(it)
+
             }
         }
         llLoginOut.setOnClickListener {

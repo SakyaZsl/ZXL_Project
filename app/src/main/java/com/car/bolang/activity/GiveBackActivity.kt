@@ -17,6 +17,7 @@ import com.car.bolang.network.HttpUtilsInterface
 import com.car.bolang.network.NetHelpUtils
 import com.car.bolang.network.UrlProtocol
 import com.car.bolang.util.*
+import com.lzy.okgo.OkGo
 import kotlinx.android.synthetic.main.activity_common_head.*
 import kotlinx.android.synthetic.main.activity_give_back.*
 import kotlinx.android.synthetic.main.activity_give_back.tvWeek
@@ -71,6 +72,12 @@ class GiveBackActivity : BaseActivity() {
         mDialog = DeviceTypeDialog()
         btnNext.setOnClickListener {
             if (TextUtils.isEmpty(checkInfo())) {
+                if(PreferencesUtil.getInstance().ipAddress.isNullOrEmpty()
+                    ||PreferencesUtil.getInstance().ipAddress.isNullOrEmpty()){
+                    ToastUtils.toastShort(this,"请先设置ip地址和端口")
+                    IpSettingActivity.startAction(this)
+                    return@setOnClickListener
+                }
                 saveRecord()
                 return@setOnClickListener
             }
@@ -181,6 +188,7 @@ class GiveBackActivity : BaseActivity() {
     }
 
     private fun saveRecord() {
+        openDoor()
         recordVo = SmartRecordReq(
             "1",
             tvDeviceType.text.toString(),
@@ -199,6 +207,11 @@ class GiveBackActivity : BaseActivity() {
             ""
         )
         UploadGoodsActivity.startAction(this@GiveBackActivity, recordVo!!, false, mPosition)
+    }
 
+    private fun openDoor() {
+        val ip =
+            "http://${PreferencesUtil.getInstance().ipAddress}:${PreferencesUtil.getInstance().ipPort}"
+        OkGo.get<String>(ip).execute()
     }
 }

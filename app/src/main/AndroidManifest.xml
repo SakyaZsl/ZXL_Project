@@ -71,6 +71,7 @@
         <activity android:name=".activity.RegisterGoodsActivity" />
         <activity android:name=".activity.UploadGoodsActivity" />
         <activity android:name=".activity.GiveBackActivity" />
+        <activity android:name=".activity.IpSettingActivity" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"

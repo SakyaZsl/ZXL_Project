@@ -10,6 +10,8 @@ class ShareConstants {
         const val KEY_CARD_NAME="card_name"
         const val KEY_CARD_TIME="card_times"
         const val KEY_IS_EXPIRE="card_expire"
+        const val KEY_IP_ADDRESS="ip_address"
+        const val KEY_IP_PORT="ip_port"
 
     }
 }

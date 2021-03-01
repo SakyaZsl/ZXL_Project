@@ -226,4 +226,21 @@ public class PreferencesUtil {
     public  void  setIsExpire(boolean isExpire){
         saveParam(ShareConstants.KEY_IS_EXPIRE,isExpire);
     }
+
+
+    public String getIpAddress(){
+        return preferences.getString(ShareConstants.KEY_IP_ADDRESS,"");
+    }
+
+    public  void  setIpAddress(String address){
+        saveParam(ShareConstants.KEY_IP_ADDRESS,address);
+    }
+
+    public String  getIpPort(){
+        return preferences.getString(ShareConstants.KEY_IP_PORT,"");
+    }
+
+    public  void  setIpPort(String port){
+        saveParam(ShareConstants.KEY_IP_PORT,port);
+    }
 }
